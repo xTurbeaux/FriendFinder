@@ -9,8 +9,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 </head>
 <body>
 
@@ -168,23 +168,91 @@
 
     </div>
 
-        $("#submit").on("click", function() {
+        <div id+"resultsModal" class="modal fade" role="dialog">
+            <div class="modal-header">
+                <button type ="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title"><strong>Best Match</strong></h2>
+            </div>
+            <div class="modal-body">
+                <h2 id="matchName"></h2>
+                <img id="matchImg" src="" alt="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+
+var config = {
+".chosen-select": {},
+".chosen-select-no-single": { disable_search_threshold: 10 },
+".chosen-select-no-results": { no_results_text: "notta" },
+".chosen-select-deselect": { allow_single_deselect: true },
+".chosen-select-width": { width: "95%" }
+  };
+  
+  for (var selector in config) {
+      $(selector).chosen(config[selector]);
+  }
+
+        
+    $("#submit").on("click", function() {
+        function validateForm(){
             var isValid = true;
             $(".form-control").each(function() {
                 if ($(this).val() === "") {
-                    isValid = false,
+                    isValid = false;
+                }
+            });
+            $(".chosen-select").each(function() {
+                if ($(this).val() === "") {
+                    isValid = false;
                 }
             });
             return isValid;
-            }
-
-        if (validateForm()) {
-            var userData = {
-                name: $("#name").val(),
-                photo: $("#photo").val(),
-                scores: [
-                
-                ]
-            }
         }
-</body>
+            
+
+            if (validateForm()) {
+                var userData = {
+                    name: $("#name").val(),
+                    photo: $("#photo").val(),
+                    scores: [
+                        $("#q1").val(),
+                        $("#q2").val(),
+                        $("#q3").val(),
+                        $("#q4").val(),
+                        $("#q5").val(),
+                        $("q6").val(),
+                        $("#q7").val(),
+                        $("#q8").val(),
+                        $("#q9").val(),
+                        $("#q10").val()
+                    ]
+            };
+
+        var currentURL = window.location.origin;
+        $.post(currentURL + "/api/friends", userDatam, function(data) {
+            $("matchName").text(data.name);
+            $("matchImage").attr("src", data.photo);
+            
+            $("#resultsModal").modal("toggle");
+           
+        });
+    }
+
+    else {
+        alert("Fill the fields up!!");
+    }
+    return false;
+
+    });
+    
+ </script>
+
+ </body>
+
+</html>
