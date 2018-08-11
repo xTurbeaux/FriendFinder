@@ -12,6 +12,8 @@ module.exports = function(app) {
             friendDifference: 1000
         };
 
+        console.log(req.body);
+
         var userData = req.body;
         var userScores = userData.scores;
         var totalDifference = 0;
@@ -26,5 +28,7 @@ module.exports = function(app) {
                 bestMatch.friendDifference = totalDifference;
             }
         }
-        });
+    });
+    friends.push(userData);
+    res.json(bestMatch);
 };
